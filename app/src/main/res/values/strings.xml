@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">ProjectMovie1</string>
+    <string name="response_success">Successfully updated </string>
+    <string name="response_error">Error getting data</string>
+    <string name="order">Order</string>
+    <string name="order_popular">Most popular</string>
+    <string name="order_rated">Highest-rated</string>
+    <string name="ivd_label">Movie poster</string>
+    <string name="title_activity_detail">DetailActivity</string>
+
+</resources>
