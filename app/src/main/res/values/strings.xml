@@ -8,4 +8,10 @@
     <string name="ivd_label">Movie poster</string>
     <string name="title_activity_detail">DetailActivity</string>
 
+    <string name="detail_movie_tab_videos">Trailers</string>
+    <string name="detail_movie_tab_reviews">Reviews</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

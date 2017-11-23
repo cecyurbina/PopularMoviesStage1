@@ -1,6 +1,8 @@
 package com.projectmovie1.Communication;
 
+import com.projectmovie1.POJOS.Comments.ResponseComments;
 import com.projectmovie1.POJOS.PopularMovieResult;
+import com.projectmovie1.POJOS.Videos.ResponseVideos;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -17,5 +19,12 @@ public interface ApiInterface {
 
     @GET("movie/top_rated/")
     Call<PopularMovieResult> getMovieRated(@Query("api_key") String apiKey);
+
+    @GET("movie/{movie_id}/videos/")
+    Call<ResponseVideos> getVideos(@Query("api_key") String apiKey);
+
+    @GET("movie/{movie_id}/reviews/")
+    Call<ResponseComments> getComments(@Query("api_key") String apiKey);
+
 
 }
