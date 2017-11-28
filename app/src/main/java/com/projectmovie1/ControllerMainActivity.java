@@ -3,7 +3,7 @@ package com.projectmovie1;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.projectmovie1.Communication.ApiInterface;
-import com.projectmovie1.POJOS.PopularMovieResult;
+import com.projectmovie1.Models.PopularMovieResult;
 import com.projectmovie1.Utilities.ListenerResponse;
 import com.projectmovie1.Utilities.Utils;
 

@@ -1,6 +1,6 @@
 package com.projectmovie1.Utilities;
 
-import com.projectmovie1.POJOS.PopularMovieResult;
+import com.projectmovie1.Models.PopularMovieResult;
 
 /**
  * Created by cecy on 9/19/17.

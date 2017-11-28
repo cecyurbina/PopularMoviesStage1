@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.projectmovie1.POJOS.Result;
+import com.projectmovie1.Models.Result;
 import com.projectmovie1.Utilities.Utils;
 import com.squareup.picasso.Picasso;
 

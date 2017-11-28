@@ -26,76 +26,48 @@ public class DetailActivity extends AppCompatActivity implements TrailersFragmen
     public static final String KEY_RELEASE_DATE = "date";
     public static final String KEY_VOTE_AVERAGE = "average";
     public static final String KEY_PLOT_SYNOPSIS = "synopsis";
+    private String titleText;
+    private String releaseDateText;
+    private String averageText;
+    private String synopsisText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_detail2);
 
-        ImageView ivPoster = (ImageView) findViewById(R.id.iv_movie_poster);
+        ImageView ivPoster = (ImageView) findViewById(R.id.htab_header);
+        /*
         TextView tvTitle = (TextView) findViewById(R.id.tv_movie_title);
         TextView tvReleaseDate = (TextView) findViewById(R.id.tv_movie_release_date);
         TextView tvVoteAverage = (TextView) findViewById(R.id.tv_movie_vote_average);
-        TextView tvPlotSynopsis = (TextView) findViewById(R.id.tv_movie_plot_synopsis);
-        //RecyclerView rvMoviesTrailers = (RecyclerView) findViewById(R.id.rv_movies_trailers);
-        //RecyclerView.Adapter mAdapter;
-        //RecyclerView.LayoutManager mLayoutManager;
+        TextView tvPlotSynopsis = (TextView) findViewById(R.id.tv_movie_plot_synopsis);*/
+
         DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
         final ViewPager mViewPager;
 
         Intent intent = getIntent();
         if (null != intent) { //Null Checking
             String urlText= intent.getStringExtra(KEY_URL_POSTER);
-            String titleText= intent.getStringExtra(KEY_TITLE);
-            String releaseDateText= intent.getStringExtra(KEY_RELEASE_DATE);
-            String averageText= intent.getStringExtra(KEY_VOTE_AVERAGE);
-            String synopsisText= intent.getStringExtra(KEY_PLOT_SYNOPSIS);
+            titleText= intent.getStringExtra(KEY_TITLE);
+            releaseDateText= intent.getStringExtra(KEY_RELEASE_DATE);
+            averageText= intent.getStringExtra(KEY_VOTE_AVERAGE);
+            synopsisText = intent.getStringExtra(KEY_PLOT_SYNOPSIS);
             setTitle(titleText);
             Picasso.with(this).load(urlText).into(ivPoster);
-            tvTitle.setText(titleText);
+            /*tvTitle.setText(titleText);
             tvReleaseDate.setText(releaseDateText);
             tvVoteAverage.setText(averageText);
-            tvPlotSynopsis.setText(synopsisText);
+            tvPlotSynopsis.setText(synopsisText);*/
 
             TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+            tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.detail_movie_info)));
             tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.detail_movie_tab_videos)));
             tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.detail_movie_tab_reviews)));
-            /*
-            // use a linear layout manager
-            mLayoutManager = new LinearLayoutManager(this);
-            rvMoviesTrailers.setLayoutManager(mLayoutManager);
-            rvMoviesTrailers.setNestedScrollingEnabled(false);
 
-            // specify an adapter (see also next example)
-             String[] myDataset = new String[20];
-            myDataset[0] = "a";
-            myDataset[1] = "b";
-            myDataset[2] = "c";
-            myDataset[3] = "d";
-            myDataset[4] = "f";
-            myDataset[5] = "a";
-            myDataset[6] = "b";
-            myDataset[7] = "c";
-            myDataset[8] = "d";
-            myDataset[9] = "f";
-            myDataset[10] = "aa";
-            myDataset[11] = "bb";
-            myDataset[12] = "cc";
-            myDataset[13] = "dd";
-            myDataset[14] = "ff";
-            myDataset[15] = "aaa";
-            myDataset[16] = "bbb";
-            myDataset[17] = "ccc";
-            myDataset[18] = "ddd";
-            myDataset[19] = "fff";
-
-            mAdapter = new MyAdapter(myDataset);
-            rvMoviesTrailers.setAdapter(mAdapter);*/
-            // ViewPager and its adapters use support library
-            // fragments, so use getSupportFragmentManager.
             mDemoCollectionPagerAdapter =
                     new DemoCollectionPagerAdapter(
-                            getSupportFragmentManager(), 2);
+                            getSupportFragmentManager(), 3);
             mViewPager = (ViewPager) findViewById(R.id.pager);
             mViewPager.setAdapter(mDemoCollectionPagerAdapter);
             tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -139,11 +111,14 @@ public class DetailActivity extends AppCompatActivity implements TrailersFragmen
 
             switch (position) {
                 case 0:
-                    TrailersFragment tab1 = new TrailersFragment();
+                    GeneralInfoFragment tab1 = GeneralInfoFragment.newInstance(titleText, releaseDateText, averageText, synopsisText);
                     return tab1;
                 case 1:
-                    CommentsFragment tab2 = new CommentsFragment();
+                    TrailersFragment tab2 = new TrailersFragment();
                     return tab2;
+                case 2:
+                    CommentsFragment tab3 = new CommentsFragment();
+                    return tab3;
                 default:
                     return null;
             }

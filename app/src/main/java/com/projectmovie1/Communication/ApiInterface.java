@@ -1,8 +1,8 @@
 package com.projectmovie1.Communication;
 
-import com.projectmovie1.POJOS.Comments.ResponseComments;
-import com.projectmovie1.POJOS.PopularMovieResult;
-import com.projectmovie1.POJOS.Videos.ResponseVideos;
+import com.projectmovie1.Models.Comments.ResponseComments;
+import com.projectmovie1.Models.PopularMovieResult;
+import com.projectmovie1.Models.Videos.ResponseVideos;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

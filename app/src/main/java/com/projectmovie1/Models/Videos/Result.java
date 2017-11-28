@@ -1,4 +1,4 @@
-package com.projectmovie1.POJOS.Videos;
+package com.projectmovie1.Models.Videos;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
