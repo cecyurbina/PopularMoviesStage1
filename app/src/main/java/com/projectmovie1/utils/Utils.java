@@ -1,4 +1,4 @@
-package com.projectmovie1.Utilities;
+package com.projectmovie1.utils;
 
 /**
  * Created by cecy on 9/19/17.

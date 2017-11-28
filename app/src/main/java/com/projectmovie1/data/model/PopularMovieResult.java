@@ -1,4 +1,4 @@
-package com.projectmovie1.Models;
+package com.projectmovie1.data.model;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

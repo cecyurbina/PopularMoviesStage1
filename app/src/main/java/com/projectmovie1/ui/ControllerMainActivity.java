@@ -1,11 +1,11 @@
-package com.projectmovie1;
+package com.projectmovie1.ui;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.projectmovie1.Communication.ApiInterface;
-import com.projectmovie1.Models.PopularMovieResult;
-import com.projectmovie1.Utilities.ListenerResponse;
-import com.projectmovie1.Utilities.Utils;
+import com.projectmovie1.data.repository.service.TheMovieApi;
+import com.projectmovie1.data.model.PopularMovieResult;
+import com.projectmovie1.utils.ListenerResponse;
+import com.projectmovie1.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -21,7 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ControllerMainActivity {
     private Retrofit retrofit;
-    private ApiInterface apiService;
+    private TheMovieApi apiService;
 
     public ControllerMainActivity(){
         initializeCommunicationModule();
@@ -37,7 +37,7 @@ public class ControllerMainActivity {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
-        apiService = retrofit.create(ApiInterface.class);
+        apiService = retrofit.create(TheMovieApi.class);
 
     }
 

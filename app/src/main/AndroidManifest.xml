@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,8 +19,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:parentActivityName=".MainActivity"
-            android:name=".DetailActivity"
+            android:parentActivityName=".ui.MainActivity"
+            android:name=".ui.DetailActivity"
             android:label="@string/title_activity_detail" />
     </application>
 

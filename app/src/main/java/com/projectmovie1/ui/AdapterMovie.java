@@ -1,4 +1,4 @@
-package com.projectmovie1;
+package com.projectmovie1.ui;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,8 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.projectmovie1.Models.Result;
-import com.projectmovie1.Utilities.Utils;
+import com.projectmovie1.data.model.Result;
+import com.projectmovie1.R;
+import com.projectmovie1.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

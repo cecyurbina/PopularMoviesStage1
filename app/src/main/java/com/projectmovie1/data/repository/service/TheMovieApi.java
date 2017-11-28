@@ -1,8 +1,8 @@
-package com.projectmovie1.Communication;
+package com.projectmovie1.data.repository.service;
 
-import com.projectmovie1.Models.Comments.ResponseComments;
-import com.projectmovie1.Models.PopularMovieResult;
-import com.projectmovie1.Models.Videos.ResponseVideos;
+import com.projectmovie1.data.model.comments.ResponseComments;
+import com.projectmovie1.data.model.PopularMovieResult;
+import com.projectmovie1.data.model.videos.ResponseVideos;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -12,7 +12,7 @@ import retrofit2.http.Query;
  * Created by cecy on 9/19/17.
  */
 
-public interface ApiInterface {
+public interface TheMovieApi {
 
     @GET("movie/popular/")
     Call<PopularMovieResult> getMoviePopular(@Query("api_key") String apiKey);

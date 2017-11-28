@@ -1,4 +1,4 @@
-package com.projectmovie1;
+package com.projectmovie1.ui;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,14 +9,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.projectmovie1.R;
 import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity implements TrailersFragment.OnFragmentInteractionListener{
