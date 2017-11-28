@@ -1,4 +1,4 @@
-package com.projectmovie1;
+package com.projectmovie1.ui;
 
 import android.content.Context;
 import android.net.Uri;
@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.projectmovie1.R;
 
 
 /**

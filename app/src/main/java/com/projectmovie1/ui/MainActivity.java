@@ -1,4 +1,4 @@
-package com.projectmovie1;
+package com.projectmovie1.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,9 +13,13 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.projectmovie1.Models.Result;
-import com.projectmovie1.Utilities.ListenerResponse;
-import com.projectmovie1.Utilities.Utils;
+import com.projectmovie1.R;
+import com.projectmovie1.data.model.Result;
+import com.projectmovie1.utils.ListenerResponse;
+import com.projectmovie1.utils.Utils;
+import com.projectmovie1.ui.AdapterMovie;
+import com.projectmovie1.ui.ControllerMainActivity;
+import com.projectmovie1.ui.DetailActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -26,7 +30,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
     private GridView gridView;
-    private AdapterMovie  adapterMovie;
+    private AdapterMovie adapterMovie;
     private List<Result> movies = new ArrayList<>();
     private ControllerMainActivity controllerMainActivity;
 

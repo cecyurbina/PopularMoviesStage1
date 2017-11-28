@@ -1,4 +1,4 @@
-package com.projectmovie1.Models.Comments;
+package com.projectmovie1.data.model.comments;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
