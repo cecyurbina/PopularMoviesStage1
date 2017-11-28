@@ -1,4 +1,4 @@
-package com.projectmovie1.POJOS.Videos;
+package com.projectmovie1.Models.Videos;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

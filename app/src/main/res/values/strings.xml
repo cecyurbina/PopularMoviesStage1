@@ -8,6 +8,7 @@
     <string name="ivd_label">Movie poster</string>
     <string name="title_activity_detail">DetailActivity</string>
 
+    <string name="detail_movie_info">Info</string>
     <string name="detail_movie_tab_videos">Trailers</string>
     <string name="detail_movie_tab_reviews">Reviews</string>
 

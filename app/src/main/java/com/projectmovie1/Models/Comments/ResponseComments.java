@@ -1,4 +1,4 @@
-package com.projectmovie1.POJOS.Comments;
+package com.projectmovie1.Models.Comments;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
