@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onStop();
     }
 
-    public void showToast(String message) {
+    private void showToast(String message) {
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_LONG;
 
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-    public void showPopup(View v) {
+    private void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_order, popup.getMenu());
@@ -127,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         intent.putExtra(DetailActivity.KEY_VOTE_AVERAGE, String.valueOf(tempResult.getVoteAverage()));
         intent.putExtra(DetailActivity.KEY_RELEASE_DATE, tempResult.getReleaseDate());
         intent.putExtra(DetailActivity.KEY_PLOT_SYNOPSIS, tempResult.getOverview());
+        intent.putExtra(DetailActivity.KEY_MOVIE_ID, tempResult.getId());
+
         startActivity(intent);
 
     }

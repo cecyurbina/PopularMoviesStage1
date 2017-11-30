@@ -14,8 +14,9 @@ import android.widget.ImageView;
 import com.projectmovie1.R;
 import com.squareup.picasso.Picasso;
 
-public class DetailActivity extends AppCompatActivity implements TrailersFragment.OnFragmentInteractionListener{
+public class DetailActivity extends AppCompatActivity implements TrailersFragment.OnFragmentInteractionListener, DetailMovieView{
 
+    public static final String KEY_MOVIE_ID = "movie_id";
     public static final String KEY_URL_POSTER = "poster_url";
     public static final String KEY_TITLE = "title";
     public static final String KEY_RELEASE_DATE = "date";
@@ -25,6 +26,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersFragmen
     private String releaseDateText;
     private String averageText;
     private String synopsisText;
+    private Integer movieId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersFragmen
             releaseDateText= intent.getStringExtra(KEY_RELEASE_DATE);
             averageText= intent.getStringExtra(KEY_VOTE_AVERAGE);
             synopsisText = intent.getStringExtra(KEY_PLOT_SYNOPSIS);
+            movieId = intent.getIntExtra(KEY_MOVIE_ID, 0);
             setTitle(titleText);
             Picasso.with(this).load(urlText).into(ivPoster);
             /*tvTitle.setText(titleText);
@@ -62,7 +65,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersFragmen
 
             mDemoCollectionPagerAdapter =
                     new DemoCollectionPagerAdapter(
-                            getSupportFragmentManager(), 3);
+                            getSupportFragmentManager());
             mViewPager = (ViewPager) findViewById(R.id.pager);
             mViewPager.setAdapter(mDemoCollectionPagerAdapter);
             tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -91,14 +94,19 @@ public class DetailActivity extends AppCompatActivity implements TrailersFragmen
 
     }
 
+    @Override
+    public Integer getMovieId() {
+        return movieId;
+    }
+
     // Since this is an object collection, use a FragmentStatePagerAdapter,
     // and NOT a FragmentPagerAdapter.
     public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
-        int mNumOfTabs;
+        final int mNumOfTabs;
 
-        public DemoCollectionPagerAdapter(FragmentManager fm, int NumOfTabs) {
+        public DemoCollectionPagerAdapter(FragmentManager fm) {
             super(fm);
-            this.mNumOfTabs = NumOfTabs;
+            this.mNumOfTabs = 3;
         }
 
         @Override
@@ -106,14 +114,11 @@ public class DetailActivity extends AppCompatActivity implements TrailersFragmen
 
             switch (position) {
                 case 0:
-                    GeneralInfoFragment tab1 = GeneralInfoFragment.newInstance(titleText, releaseDateText, averageText, synopsisText);
-                    return tab1;
+                    return GeneralInfoFragment.newInstance(titleText, releaseDateText, averageText, synopsisText);
                 case 1:
-                    TrailersFragment tab2 = new TrailersFragment();
-                    return tab2;
+                    return new TrailersFragment();
                 case 2:
-                    CommentsFragment tab3 = new CommentsFragment();
-                    return tab3;
+                    return new CommentsFragment();
                 default:
                     return null;
             }
