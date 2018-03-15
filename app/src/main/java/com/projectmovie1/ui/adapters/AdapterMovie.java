@@ -1,4 +1,4 @@
-package com.projectmovie1.ui;
+package com.projectmovie1.ui.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

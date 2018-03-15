@@ -1,4 +1,4 @@
-package com.projectmovie1.ui;
+package com.projectmovie1.ui.fragments;
 
 
 import android.content.Context;
@@ -14,6 +14,9 @@ import com.projectmovie1.data.model.comments.ResponseComments;
 import com.projectmovie1.data.model.comments.Result;
 import com.projectmovie1.presenter.CommentsPresenter;
 import com.projectmovie1.presenter.CommentsPresenterImpl;
+import com.projectmovie1.ui.adapters.CommentsAdapter;
+import com.projectmovie1.ui.view.CommentsView;
+import com.projectmovie1.ui.view.DetailMovieView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,13 +101,13 @@ public class CommentsFragment extends Fragment implements CommentsView {
     }
 
     @Override
-    public void onDestroyView(){
+    public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         presenter.onDestroy();
         super.onDestroy();
     }

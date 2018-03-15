@@ -1,4 +1,4 @@
-package com.projectmovie1.ui;
+package com.projectmovie1.ui.view;
 
 import com.projectmovie1.data.model.comments.ResponseComments;
 

@@ -1,4 +1,4 @@
-package com.projectmovie1.ui;
+package com.projectmovie1.ui.fragments;
 
 import android.content.Context;
 import android.net.Uri;

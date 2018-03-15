@@ -1,4 +1,4 @@
-package com.projectmovie1.ui;
+package com.projectmovie1.ui.activities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,12 +9,17 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 
 import com.projectmovie1.R;
+import com.projectmovie1.ui.fragments.CommentsFragment;
+import com.projectmovie1.ui.fragments.GeneralInfoFragment;
+import com.projectmovie1.ui.fragments.TrailersFragment;
+import com.projectmovie1.ui.view.DetailMovieView;
 import com.squareup.picasso.Picasso;
 
-public class DetailActivity extends AppCompatActivity implements TrailersFragment.OnFragmentInteractionListener, DetailMovieView{
+public class DetailActivity extends AppCompatActivity implements TrailersFragment.OnFragmentInteractionListener, DetailMovieView {
 
     public static final String KEY_MOVIE_ID = "movie_id";
     public static final String KEY_URL_POSTER = "poster_url";
@@ -28,17 +33,18 @@ public class DetailActivity extends AppCompatActivity implements TrailersFragmen
     private String synopsisText;
     private Integer movieId;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail2);
 
         ImageView ivPoster = (ImageView) findViewById(R.id.htab_header);
-        /*
-        TextView tvTitle = (TextView) findViewById(R.id.tv_movie_title);
-        TextView tvReleaseDate = (TextView) findViewById(R.id.tv_movie_release_date);
-        TextView tvVoteAverage = (TextView) findViewById(R.id.tv_movie_vote_average);
-        TextView tvPlotSynopsis = (TextView) findViewById(R.id.tv_movie_plot_synopsis);*/
+        Toolbar toolbar = (Toolbar) findViewById(R.id.htab_toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
         final ViewPager mViewPager;
