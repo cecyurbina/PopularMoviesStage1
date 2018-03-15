@@ -4,7 +4,6 @@ import com.projectmovie1.data.model.comments.ResponseComments;
 import com.projectmovie1.data.model.PopularMovieResult;
 import com.projectmovie1.data.model.videos.ResponseVideos;
 
-import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -17,13 +16,13 @@ import rx.Observable;
 public interface TheMovieApi {
 
     @GET("movie/popular/")
-    Call<PopularMovieResult> getMoviePopular(@Query("api_key") String apiKey);
+    Observable<PopularMovieResult> getMoviePopular(@Query("api_key") String apiKey);
 
     @GET("movie/top_rated/")
-    Call<PopularMovieResult> getMovieRated(@Query("api_key") String apiKey);
+    Observable<PopularMovieResult> getMovieRated(@Query("api_key") String apiKey);
 
-    @GET("movie/{movie_id}/videos/")
-    Call<ResponseVideos> getVideos(@Query("api_key") String apiKey);
+    @GET("movie/{movie_id}/videos")
+    Observable<ResponseVideos> getVideos(@Path("movie_id") Integer movieId, @Query("api_key") String apiKey);
 
     @GET("movie/{movie_id}/reviews")
     Observable<ResponseComments> getComments(@Path("movie_id") Integer movieId, @Query("api_key") String  apiKey);

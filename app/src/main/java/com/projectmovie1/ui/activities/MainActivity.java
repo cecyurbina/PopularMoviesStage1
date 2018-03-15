@@ -1,4 +1,4 @@
-package com.projectmovie1.ui;
+package com.projectmovie1.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,60 +14,48 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.projectmovie1.R;
+import com.projectmovie1.data.model.PopularMovieResult;
 import com.projectmovie1.data.model.Result;
-import com.projectmovie1.utils.ListenerResponse;
+import com.projectmovie1.presenter.MainPresenter;
+import com.projectmovie1.presenter.MainPresenterImpl;
+import com.projectmovie1.ui.view.MainView;
 import com.projectmovie1.utils.Utils;
-import com.projectmovie1.ui.AdapterMovie;
-import com.projectmovie1.ui.ControllerMainActivity;
-import com.projectmovie1.ui.DetailActivity;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
+import com.projectmovie1.ui.adapters.AdapterMovie;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
-    private GridView gridView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class MainActivity extends AppCompatActivity implements MainView, AdapterView.OnItemClickListener{
+    @BindView(R.id.gv_movies) GridView gridView;
+
     private AdapterMovie adapterMovie;
     private List<Result> movies = new ArrayList<>();
-    private ControllerMainActivity controllerMainActivity;
+    private MainPresenter controllerMainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        controllerMainActivity = new ControllerMainActivity();
-        gridView = (GridView) findViewById(R.id.gv_movies);
+        controllerMainActivity = new MainPresenterImpl(this);
         adapterMovie = new AdapterMovie(this, movies);
         gridView.setAdapter(adapterMovie);
         gridView.setOnItemClickListener(this);
-        controllerMainActivity.getPopularMovies();
+        getPopularMovies();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(ListenerResponse event) {
-        if (event.isSuccessful) {
-            showToast(getString(R.string.response_success));
-            movies.clear();
-            movies.addAll(event.result.getResults());
-            adapterMovie.notifyDataSetChanged();
-        } else {
-            showToast(getString(R.string.response_error));
-        }
-    }
+
 
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
     }
 
     @Override
     public void onStop() {
-        EventBus.getDefault().unregister(this);
         super.onStop();
     }
 
@@ -106,10 +94,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_order_popular:
-                        controllerMainActivity.getPopularMovies();
+                        getPopularMovies();
                         return true;
                     case R.id.action_order_rated:
-                        controllerMainActivity.getTopRatedMovies();
+                        getTopRatedMovies();
                         return true;
                     default:
                         return false;
@@ -130,6 +118,31 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         intent.putExtra(DetailActivity.KEY_MOVIE_ID, tempResult.getId());
 
         startActivity(intent);
+
+    }
+
+    @Override
+    public void getPopularMovies() {
+        controllerMainActivity.getPopularMovies();
+    }
+
+    @Override
+    public void getTopRatedMovies() {
+        controllerMainActivity.getTopRatedMovies();
+    }
+
+    @Override
+    public void moviesSuccess(PopularMovieResult responseComments) {
+            showToast(getString(R.string.response_success));
+            movies.clear();
+            movies.addAll(responseComments.getResults());
+            adapterMovie.notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void moviesError(PopularMovieResult responseComments) {
+        showToast(getString(R.string.response_error));
 
     }
 }

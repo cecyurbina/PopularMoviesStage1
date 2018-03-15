@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="com.projectmovie1.ui.CommentsFragment">
+    tools:context="com.projectmovie1.ui.fragments.CommentsFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.RecyclerView
@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_comment"
-        android:text="@string/hello_blank_fragment" />
+        tools:listitem="@layout/item_comment" />
 
 </LinearLayout>

@@ -2,10 +2,10 @@ package com.projectmovie1.presenter;
 
 import android.util.Log;
 
-import com.projectmovie1.data.model.comments.ResponseComments;
-import com.projectmovie1.data.repository.remote.CommentsRepository;
-import com.projectmovie1.data.repository.remote.CommentsRepositoryImpl;
-import com.projectmovie1.ui.view.CommentsView;
+import com.projectmovie1.data.model.videos.ResponseVideos;
+import com.projectmovie1.data.repository.remote.TrailersRepository;
+import com.projectmovie1.data.repository.remote.TrailersRepositoryImpl;
+import com.projectmovie1.ui.view.TrailersView;
 import com.projectmovie1.utils.Utils;
 
 import rx.Observer;
@@ -13,19 +13,19 @@ import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
 /**
- * Created by cecy on 11/28/17.
+ * Created by cecy on 2/19/18.
+ * InfoSync
  */
 
-public class CommentsPresenterImpl implements CommentsPresenter{
-
-    private CommentsView view;
+public class TrailersPresenterImpl implements TrailersPresenter {
+    private TrailersView view;
     private CompositeSubscription mSubscription;
-    private CommentsRepository  commentsRepository;
+    private TrailersRepository trailersRepository;
 
-    public CommentsPresenterImpl(CommentsView view){
+    public TrailersPresenterImpl(TrailersView view){
         this.view = view;
         this.mSubscription = new CompositeSubscription();
-        this.commentsRepository = new CommentsRepositoryImpl();
+        this.trailersRepository = new TrailersRepositoryImpl();
     }
 
     @Override
@@ -40,11 +40,11 @@ public class CommentsPresenterImpl implements CommentsPresenter{
     }
 
     @Override
-    public void getComments(Integer movieId) {
-        Subscription subscription = commentsRepository.getComments(Utils.API_KEY, movieId).subscribe(new Observer<ResponseComments>() {
+    public void getTrailers(Integer movieId) {
+        Subscription subscription = trailersRepository.getVideos(Utils.API_KEY, movieId).subscribe(new Observer<ResponseVideos>() {
             @Override
             public void onCompleted() {
-                view.commentsError(null);
+                view.trailersError(null);
             }
 
             @Override
@@ -53,9 +53,9 @@ public class CommentsPresenterImpl implements CommentsPresenter{
             }
 
             @Override
-            public void onNext(ResponseComments responseComments) {
+            public void onNext(ResponseVideos responseVideos) {
                 if (view != null){
-                    view.commentsSuccess(responseComments);
+                    view.trailersSuccess(responseVideos);
                 }
 
             }

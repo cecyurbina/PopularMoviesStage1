@@ -1,14 +1,29 @@
-package com.projectmovie1.ui;
+package com.projectmovie1.ui.fragments;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.projectmovie1.R;
+import com.projectmovie1.data.model.videos.ResponseVideos;
+import com.projectmovie1.data.model.videos.Result;
+import com.projectmovie1.presenter.TrailersPresenter;
+import com.projectmovie1.presenter.TrailersPresenterImpl;
+import com.projectmovie1.ui.adapters.TrailersAdapter;
+import com.projectmovie1.ui.view.DetailMovieView;
+import com.projectmovie1.ui.view.TrailersView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 /**
@@ -19,17 +34,25 @@ import com.projectmovie1.R;
  * Use the {@link TrailersFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TrailersFragment extends Fragment {
+public class TrailersFragment extends Fragment implements TrailersView {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+    private TrailersPresenter presenter;
+    private Unbinder unbinder;
+    private TrailersAdapter trailersAdapter;
+    List<Result> trailersList = new ArrayList<>();
+    private DetailMovieView mCallback;
+    @BindView(R.id.rv_trailers)
+    RecyclerView rvTrailers;
+
+
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
 
     public TrailersFragment() {
         // Required empty public constructor
@@ -60,37 +83,44 @@ public class TrailersFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        presenter = new TrailersPresenterImpl(this);
+        presenter.onCreate();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trailers, container, false);
+        View view = inflater.inflate(R.layout.fragment_trailers, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        trailersAdapter = new TrailersAdapter(this, trailersList);
+        rvTrailers.setAdapter(trailersAdapter);
+        getTrailers();
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mCallback = null;
+    }
+
+    @Override
+    public void getTrailers() {
+        presenter.getTrailers(mCallback.getMovieId());
+    }
+
+    @Override
+    public void trailersSuccess(ResponseVideos responseVideos) {
+        trailersList.clear();
+        trailersList.addAll(responseVideos.getResults());
+        trailersAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void trailersError(ResponseVideos responseComments) {
+
     }
 
     /**
@@ -106,5 +136,31 @@ public class TrailersFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onAttach(Context activity) {
+        super.onAttach(activity);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            mCallback = (DetailMovieView) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    @Override
+    public void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
     }
 }
