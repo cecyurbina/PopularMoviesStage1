@@ -57,7 +57,7 @@ public class AdapterMovie extends BaseAdapter{
 
         final Result movie = getItem(position);
         Picasso.with(context).load(Utils.IMAGE_URL+movie.getPosterPath()).into(imagePosterMovie);
-        titleMovie.setText(movie.getOriginalTitle());
+        titleMovie.setText(movie.getTitle());
 
         return view;
     }
