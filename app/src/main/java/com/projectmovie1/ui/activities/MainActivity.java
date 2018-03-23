@@ -14,6 +14,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.projectmovie1.R;
+import com.projectmovie1.data.DatabaseHelper;
 import com.projectmovie1.data.model.PopularMovieResult;
 import com.projectmovie1.data.model.Result;
 import com.projectmovie1.presenter.MainPresenter;
@@ -99,6 +100,8 @@ public class MainActivity extends AppCompatActivity implements MainView, Adapter
                     case R.id.action_order_rated:
                         getTopRatedMovies();
                         return true;
+                    case R.id.action_order_favorites:
+                        getFavoritesMovies();
                     default:
                         return false;
                 }
@@ -143,6 +146,13 @@ public class MainActivity extends AppCompatActivity implements MainView, Adapter
     @Override
     public void moviesError(PopularMovieResult responseComments) {
         showToast(getString(R.string.response_error));
+    }
 
+    public void getFavoritesMovies() {
+        DatabaseHelper helper = DatabaseHelper.getInstance(this);
+        movies.clear();
+        List<Result> a = helper.getFavorites();
+        movies.addAll(a);
+        adapterMovie.notifyDataSetChanged();
     }
 }

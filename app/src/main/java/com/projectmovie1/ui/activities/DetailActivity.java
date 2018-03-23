@@ -120,7 +120,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersFragmen
 
             switch (position) {
                 case 0:
-                    return GeneralInfoFragment.newInstance(titleText, releaseDateText, averageText, synopsisText);
+                    return GeneralInfoFragment.newInstance(titleText, releaseDateText, averageText, synopsisText, movieId);
                 case 1:
                     return new TrailersFragment();
                 case 2:

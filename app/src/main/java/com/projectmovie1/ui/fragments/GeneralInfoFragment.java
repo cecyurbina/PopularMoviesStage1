@@ -4,12 +4,20 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.projectmovie1.R;
+import com.projectmovie1.data.DatabaseHelper;
+import com.projectmovie1.data.model.Result;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
@@ -23,17 +31,24 @@ import com.projectmovie1.R;
 public class GeneralInfoFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_ID = "id";
     private static final String ARG_TITLE = "title";
     private static final String ARG_RELEASE_DATE = "release_date";
     private static final String ARG_VOTE_AVERAGE = "average";
     private static final String ARG_PLOT_SYNOPSIS = "synopsis";
 
-
     // TODO: Rename and change types of parameters
+    private int id;
     private String title;
     private String releaseDate;
     private String voteAverage;
     private String plotSynopsis;
+
+    @BindView(R.id.tv_movie_title) TextView tvTitle;
+    @BindView(R.id.tv_movie_release_date) TextView tvReleaseDate;
+    @BindView(R.id.tv_movie_vote_average) TextView tvVoteAverage;
+    @BindView(R.id.tv_movie_plot_synopsis) TextView tvPlotSynopsis;
+    @BindView(R.id.ib_fav) ImageButton ibFavorite;
 
     private OnFragmentInteractionListener mListener;
 
@@ -48,13 +63,18 @@ public class GeneralInfoFragment extends Fragment {
      * @return A new instance of fragment GeneralInfoFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static GeneralInfoFragment newInstance(String title, String releaseDate, String voteAverage, String plotSynopsis) {
+    public static GeneralInfoFragment newInstance(String title,
+                                                  String releaseDate,
+                                                  String voteAverage,
+                                                  String plotSynopsis,
+                                                  int id) {
         GeneralInfoFragment fragment = new GeneralInfoFragment();
         Bundle args = new Bundle();
         args.putString(ARG_TITLE, title);
         args.putString(ARG_RELEASE_DATE, releaseDate);
         args.putString(ARG_VOTE_AVERAGE, voteAverage);
         args.putString(ARG_PLOT_SYNOPSIS, plotSynopsis);
+        args.putInt(ARG_ID, id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,6 +87,7 @@ public class GeneralInfoFragment extends Fragment {
             releaseDate = getArguments().getString(ARG_RELEASE_DATE);
             voteAverage = getArguments().getString(ARG_VOTE_AVERAGE);
             plotSynopsis = getArguments().getString(ARG_PLOT_SYNOPSIS);
+            id = getArguments().getInt(ARG_ID);
         }
     }
 
@@ -75,15 +96,12 @@ public class GeneralInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_general_info, container, false);
-        TextView tvTitle = (TextView) view.findViewById(R.id.tv_movie_title);
-        TextView tvReleaseDate = (TextView) view.findViewById(R.id.tv_movie_release_date);
-        TextView tvVoteAverage = (TextView) view.findViewById(R.id.tv_movie_vote_average);
-        TextView tvPlotSynopsis = (TextView) view.findViewById(R.id.tv_movie_plot_synopsis);
+        ButterKnife.bind(this, view);
         tvTitle.setText(title);
         tvReleaseDate.setText(releaseDate);
         tvVoteAverage.setText(voteAverage);
         tvPlotSynopsis.setText(plotSynopsis);
-
+        setFavourite();
         return view;
     }
 
@@ -124,5 +142,32 @@ public class GeneralInfoFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @OnClick(R.id.ib_fav)
+    public void submit(View view) {
+        DatabaseHelper helper = DatabaseHelper.getInstance(getContext());
+        if (helper.isFavorite(id)){
+            helper.removeFavorite(id);
+            ibFavorite.setImageResource(R.drawable.ic_star_border_black_24dp);
+        } else {
+            Result result = new Result();
+            result.setId(id);
+            result.setTitle(title);
+            helper.addFavorite(result);
+            ibFavorite.setImageResource(R.drawable.ic_star_black_24dp);
+        }
+    }
+
+    /**
+     *
+     */
+    private void setFavourite(){
+        DatabaseHelper helper = DatabaseHelper.getInstance(getContext());
+        if (helper.isFavorite(id)){
+           ibFavorite.setImageResource(R.drawable.ic_star_black_24dp);
+        } else {
+            ibFavorite.setImageResource(R.drawable.ic_star_border_black_24dp);
+        }
     }
 }

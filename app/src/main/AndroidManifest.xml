@@ -24,6 +24,10 @@
             android:name=".ui.activities.DetailActivity"
             android:label="@string/title_activity_detail"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+        <provider
+            android:name=".data.ContentProviderEx"
+            android:authorities="com.projectmovie1.data.ContentProviderEx"/>
     </application>
 
 </manifest>
