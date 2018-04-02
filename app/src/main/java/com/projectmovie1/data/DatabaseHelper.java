@@ -25,6 +25,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_TITLE = "title";
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_URL = "url";
+    private static final String KEY_DATE = "date";
+    private static final String KEY_VOTE = "vote";
+
     private static final String TAG = DatabaseHelper.class.getSimpleName();
 
     private static DatabaseHelper sInstance;
@@ -47,7 +50,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 KEY_FAVORITE_ID + " INTEGER PRIMARY KEY," + // Define a primary key
                 KEY_TITLE + " TEXT," +
                 KEY_DESCRIPTION + " TEXT," +
-                KEY_URL + " TEXT" +
+                KEY_URL + " TEXT," +
+                KEY_DATE + " TEXT," +
+                KEY_VOTE + " TEXT" +
                 ")";
 
 
@@ -80,6 +85,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_TITLE, post.getTitle());
             values.put(KEY_DESCRIPTION, post.getOverview());
             values.put(KEY_URL, post.getPosterPath());
+            values.put(KEY_VOTE, String.valueOf(post.getVoteAverage()));
+            values.put(KEY_DATE, post.getReleaseDate());
+
             // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
             db.insertOrThrow(TABLE_FAVORITES, null, values);
             db.setTransactionSuccessful();
@@ -126,6 +134,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 resultTemp.setId(cursor.getInt(cursor.getColumnIndex(KEY_FAVORITE_ID)));
                 resultTemp.setOverview(cursor.getString(cursor.getColumnIndex(KEY_DESCRIPTION)));
                 resultTemp.setPosterPath(cursor.getString(cursor.getColumnIndex(KEY_URL)));
+                resultTemp.setVoteAverage(Double.valueOf(cursor.getString(cursor.getColumnIndex(KEY_VOTE))));
+                resultTemp.setReleaseDate(cursor.getString(cursor.getColumnIndex(KEY_DATE)));
                 list.add(resultTemp);
                 cursor.moveToNext();
             }

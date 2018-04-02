@@ -1,7 +1,6 @@
 package com.projectmovie1.ui.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -21,15 +20,10 @@ import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link GeneralInfoFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
  * Use the {@link GeneralInfoFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class GeneralInfoFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_ID = "id";
     private static final String ARG_TITLE = "title";
     private static final String ARG_RELEASE_DATE = "release_date";
@@ -37,8 +31,6 @@ public class GeneralInfoFragment extends Fragment {
     private static final String ARG_PLOT_SYNOPSIS = "synopsis";
     private static final String ARG_URL_POSTER = "url_poster";
 
-
-    // TODO: Rename and change types of parameters
     private int id;
     private String title;
     private String releaseDate;
@@ -52,7 +44,6 @@ public class GeneralInfoFragment extends Fragment {
     @BindView(R.id.tv_movie_plot_synopsis) TextView tvPlotSynopsis;
     @BindView(R.id.ib_fav) ImageButton ibFavorite;
 
-    private OnFragmentInteractionListener mListener;
 
     public GeneralInfoFragment() {
         // Required empty public constructor
@@ -64,7 +55,6 @@ public class GeneralInfoFragment extends Fragment {
      *
      * @return A new instance of fragment GeneralInfoFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static GeneralInfoFragment newInstance(String title,
                                                   String releaseDate,
                                                   String voteAverage,
@@ -110,43 +100,14 @@ public class GeneralInfoFragment extends Fragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        /*if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }*/
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 
     @OnClick(R.id.ib_fav)
@@ -161,6 +122,8 @@ public class GeneralInfoFragment extends Fragment {
             result.setTitle(title);
             result.setOverview(plotSynopsis);
             result.setPosterPath(urlPoster);
+            result.setReleaseDate(releaseDate);
+            result.setVoteAverage(Double.valueOf(voteAverage));
             helper.addFavorite(result);
             ibFavorite.setImageResource(R.drawable.ic_star_black_24dp);
         }
