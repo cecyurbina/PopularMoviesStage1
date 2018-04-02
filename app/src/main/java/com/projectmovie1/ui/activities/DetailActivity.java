@@ -1,7 +1,6 @@
 package com.projectmovie1.ui.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
@@ -12,12 +11,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.google.gson.Gson;
 import com.projectmovie1.R;
-import com.projectmovie1.data.model.PopularMovieResult;
 import com.projectmovie1.ui.fragments.CommentsFragment;
 import com.projectmovie1.ui.fragments.GeneralInfoFragment;
 import com.projectmovie1.ui.fragments.TrailersFragment;
@@ -28,7 +24,7 @@ import com.squareup.picasso.Picasso;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailActivity extends AppCompatActivity implements TrailersFragment.OnFragmentInteractionListener, DetailMovieView {
+public class DetailActivity extends AppCompatActivity implements DetailMovieView {
     private final static String KEY_SAVED_POSITION = "key_saved_position";
     public static final String KEY_MOVIE_ID = "movie_id";
     public static final String KEY_URL_POSTER = "poster_url";
@@ -114,11 +110,6 @@ public class DetailActivity extends AppCompatActivity implements TrailersFragmen
             tabLayout.setScrollPosition(selectedSection,0f,true);
             mViewPager.setCurrentItem(selectedSection);
         }
-
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
 
     }
 

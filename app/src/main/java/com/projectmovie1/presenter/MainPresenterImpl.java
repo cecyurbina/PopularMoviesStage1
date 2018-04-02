@@ -1,7 +1,5 @@
 package com.projectmovie1.presenter;
 
-import android.util.Log;
-
 import com.projectmovie1.data.model.PopularMovieResult;
 import com.projectmovie1.data.repository.remote.MoviesRepository;
 import com.projectmovie1.data.repository.remote.MoviesRepositoryImpl;
