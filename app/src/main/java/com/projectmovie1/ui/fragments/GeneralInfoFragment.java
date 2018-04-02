@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +35,8 @@ public class GeneralInfoFragment extends Fragment {
     private static final String ARG_RELEASE_DATE = "release_date";
     private static final String ARG_VOTE_AVERAGE = "average";
     private static final String ARG_PLOT_SYNOPSIS = "synopsis";
+    private static final String ARG_URL_POSTER = "url_poster";
+
 
     // TODO: Rename and change types of parameters
     private int id;
@@ -43,6 +44,7 @@ public class GeneralInfoFragment extends Fragment {
     private String releaseDate;
     private String voteAverage;
     private String plotSynopsis;
+    private String urlPoster;
 
     @BindView(R.id.tv_movie_title) TextView tvTitle;
     @BindView(R.id.tv_movie_release_date) TextView tvReleaseDate;
@@ -67,6 +69,7 @@ public class GeneralInfoFragment extends Fragment {
                                                   String releaseDate,
                                                   String voteAverage,
                                                   String plotSynopsis,
+                                                  String urlPoster,
                                                   int id) {
         GeneralInfoFragment fragment = new GeneralInfoFragment();
         Bundle args = new Bundle();
@@ -75,6 +78,7 @@ public class GeneralInfoFragment extends Fragment {
         args.putString(ARG_VOTE_AVERAGE, voteAverage);
         args.putString(ARG_PLOT_SYNOPSIS, plotSynopsis);
         args.putInt(ARG_ID, id);
+        args.putString(ARG_URL_POSTER, urlPoster);
         fragment.setArguments(args);
         return fragment;
     }
@@ -87,6 +91,7 @@ public class GeneralInfoFragment extends Fragment {
             releaseDate = getArguments().getString(ARG_RELEASE_DATE);
             voteAverage = getArguments().getString(ARG_VOTE_AVERAGE);
             plotSynopsis = getArguments().getString(ARG_PLOT_SYNOPSIS);
+            urlPoster = getArguments().getString(ARG_URL_POSTER);
             id = getArguments().getInt(ARG_ID);
         }
     }
@@ -154,6 +159,8 @@ public class GeneralInfoFragment extends Fragment {
             Result result = new Result();
             result.setId(id);
             result.setTitle(title);
+            result.setOverview(plotSynopsis);
+            result.setPosterPath(urlPoster);
             helper.addFavorite(result);
             ibFavorite.setImageResource(R.drawable.ic_star_black_24dp);
         }
