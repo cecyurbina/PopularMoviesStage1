@@ -4,10 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.PopupMenu;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,7 +20,6 @@ import com.projectmovie1.presenter.MainPresenter;
 import com.projectmovie1.presenter.MainPresenterImpl;
 import com.projectmovie1.ui.adapters.AdapterMovie;
 import com.projectmovie1.ui.view.MainView;
-import com.projectmovie1.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Adapter
     @Override
     public void onDestroy() {
         super.onDestroy();
+        presenter.onDestroy();
     }
 
     @Override

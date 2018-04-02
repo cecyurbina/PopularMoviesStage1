@@ -8,10 +8,10 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
     <android.support.design.widget.CollapsingToolbarLayout
+        android:id="@+id/ctl_image"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:fitsSystemWindows="true"
-        app:title="oola"
         app:layout_collapseMode="pin"
         app:contentScrim="?attr/colorPrimary"
         app:layout_scrollFlags="scroll|exitUntilCollapsed">

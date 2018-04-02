@@ -3,6 +3,7 @@ package com.projectmovie1.ui.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,9 +12,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
 import com.projectmovie1.R;
+import com.projectmovie1.data.model.PopularMovieResult;
 import com.projectmovie1.ui.fragments.CommentsFragment;
 import com.projectmovie1.ui.fragments.GeneralInfoFragment;
 import com.projectmovie1.ui.fragments.TrailersFragment;
@@ -21,8 +25,11 @@ import com.projectmovie1.ui.view.DetailMovieView;
 import com.projectmovie1.utils.Utils;
 import com.squareup.picasso.Picasso;
 
-public class DetailActivity extends AppCompatActivity implements TrailersFragment.OnFragmentInteractionListener, DetailMovieView {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
+public class DetailActivity extends AppCompatActivity implements TrailersFragment.OnFragmentInteractionListener, DetailMovieView {
+    private final static String KEY_SAVED_POSITION = "key_saved_position";
     public static final String KEY_MOVIE_ID = "movie_id";
     public static final String KEY_URL_POSTER = "poster_url";
     public static final String KEY_TITLE = "title";
@@ -35,22 +42,32 @@ public class DetailActivity extends AppCompatActivity implements TrailersFragmen
     private String averageText;
     private String synopsisText;
     private Integer movieId;
+    private Integer selectedSection = 0;
+    @BindView(R.id.ctl_image)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.htab_header)
+    ImageView ivPoster;
+    @BindView(R.id.htab_toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.tab_layout)
+    TabLayout tabLayout;
+    @BindView(R.id.pager)
+    ViewPager mViewPager;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail2);
+        ButterKnife.bind(this);
 
-        ImageView ivPoster = (ImageView) findViewById(R.id.htab_header);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.htab_toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
-        final ViewPager mViewPager;
 
         Intent intent = getIntent();
         if (null != intent) { //Null Checking
@@ -60,10 +77,10 @@ public class DetailActivity extends AppCompatActivity implements TrailersFragmen
             averageText = intent.getStringExtra(KEY_VOTE_AVERAGE);
             synopsisText = intent.getStringExtra(KEY_PLOT_SYNOPSIS);
             movieId = intent.getIntExtra(KEY_MOVIE_ID, 0);
+            collapsingToolbarLayout.setTitle(titleText);
             setTitle(titleText);
             Picasso.with(this).load(Utils.IMAGE_URL+urlPoster).into(ivPoster);
 
-            TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
             tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.detail_movie_info)));
             tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.detail_movie_tab_videos)));
             tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.detail_movie_tab_reviews)));
@@ -71,11 +88,12 @@ public class DetailActivity extends AppCompatActivity implements TrailersFragmen
             mDemoCollectionPagerAdapter =
                     new DemoCollectionPagerAdapter(
                             getSupportFragmentManager());
-            mViewPager = (ViewPager) findViewById(R.id.pager);
             mViewPager.setAdapter(mDemoCollectionPagerAdapter);
+
             tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
+                    selectedSection = tab.getPosition();
                     mViewPager.setCurrentItem(tab.getPosition());
                 }
 
@@ -91,6 +109,11 @@ public class DetailActivity extends AppCompatActivity implements TrailersFragmen
             });
         }
 
+        if (savedInstanceState != null) {
+            selectedSection = savedInstanceState.getInt(KEY_SAVED_POSITION);
+            tabLayout.setScrollPosition(selectedSection,0f,true);
+            mViewPager.setCurrentItem(selectedSection);
+        }
 
     }
 
@@ -116,7 +139,7 @@ public class DetailActivity extends AppCompatActivity implements TrailersFragmen
 
         @Override
         public Fragment getItem(int position) {
-
+            selectedSection = position;
             switch (position) {
                 case 0:
                     return GeneralInfoFragment.newInstance(titleText, releaseDateText, averageText, synopsisText, urlPoster, movieId);
@@ -144,6 +167,12 @@ public class DetailActivity extends AppCompatActivity implements TrailersFragmen
             default:
                 return (super.onOptionsItemSelected(menuItem));
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(KEY_SAVED_POSITION, selectedSection);
+        super.onSaveInstanceState(outState);
     }
 
 }
