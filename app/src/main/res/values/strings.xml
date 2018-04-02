@@ -1,18 +1,21 @@
 <resources>
-    <string name="app_name">ProjectMovie1</string>
+    <string name="app_name">Movies</string>
     <string name="response_success">Successfully updated </string>
     <string name="response_error">Error getting data</string>
     <string name="order">Order</string>
-    <string name="order_popular">Most popular</string>
-    <string name="order_rated">Highest-rated</string>
-    <string name="order_favorites">Favorites</string>
     <string name="ivd_label">Movie poster</string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="label_order_by">Order by:</string>
+    <string-array name="movies_order_by">
+        <item>Most popular</item>
+        <item>Highest-rated</item>
+        <item>Favorites</item>
+    </string-array>
 
     <string name="detail_movie_info">Info</string>
     <string name="detail_movie_tab_videos">Trailers</string>
     <string name="detail_movie_tab_reviews">Reviews</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+
 
 </resources>

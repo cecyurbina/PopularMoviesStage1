@@ -14,7 +14,6 @@ import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by cecy on 2/19/18.
- * InfoSync
  */
 
 public class MainPresenterImpl implements MainPresenter {
@@ -44,12 +43,10 @@ public class MainPresenterImpl implements MainPresenter {
         Subscription subscription = moviesRepository.getMoviePopular(Utils.API_KEY).subscribe(new Observer<PopularMovieResult>() {
             @Override
             public void onCompleted() {
-                view.moviesError(null);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.d(">>>>", "hi");
                 view.moviesError(null);
             }
 
@@ -70,12 +67,10 @@ public class MainPresenterImpl implements MainPresenter {
         Subscription subscription = moviesRepository.getMovieRated(Utils.API_KEY).subscribe(new Observer<PopularMovieResult>() {
             @Override
             public void onCompleted() {
-                view.moviesError(null);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.d(">>>>", "hi");
                 view.moviesError(null);
             }
 
