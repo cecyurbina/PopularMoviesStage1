@@ -2,6 +2,8 @@ package com.projectmovie1.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -16,6 +18,7 @@ import com.projectmovie1.R;
 import com.projectmovie1.data.DatabaseHelper;
 import com.projectmovie1.data.model.PopularMovieResult;
 import com.projectmovie1.data.model.Result;
+import com.projectmovie1.data.repository.MovieTable;
 import com.projectmovie1.presenter.MainPresenter;
 import com.projectmovie1.presenter.MainPresenterImpl;
 import com.projectmovie1.ui.adapters.AdapterMovie;
@@ -27,7 +30,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements MainView, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
+    public class MainActivity extends AppCompatActivity implements MainView, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
     private static final String KEY_SAVED_RESULTS = "key_saved_results";
     @BindView(R.id.gv_movies)
     GridView gridView;
@@ -59,11 +62,10 @@ public class MainActivity extends AppCompatActivity implements MainView, Adapter
         spinner.setSelection(0,false);
         spinner.setOnItemSelectedListener(this);
 
-        if (savedInstanceState != null) {
+        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_SAVED_RESULTS)) {
             String json = savedInstanceState.getString(KEY_SAVED_RESULTS);
             Gson gson = new Gson();
             moviesSuccess(gson.fromJson(json, PopularMovieResult.class));
-
         } else {
             getPopularMovies();
         }
@@ -149,6 +151,34 @@ public class MainActivity extends AppCompatActivity implements MainView, Adapter
         popularMovieResult.setResults(helper.getFavorites());
         movies.addAll(popularMovieResult.getResults());
         adapterMovie.notifyDataSetChanged();
+    }
+    private void fillData(Uri uri) {
+        String[] projection = {MovieTable.COLUMN_TITLE,
+                MovieTable.COLUMN_DESCRIPTION, MovieTable.COLUMN_DATE};
+        Cursor cursor = getContentResolver().query(uri, projection, null, null,
+                    null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            /*String category = cursor.getString(cursor
+                    .getColumnIndexOrThrow(TodoTable.COLUMN_CATEGORY));
+
+            for (int i = 0; i < mCategory.getCount(); i++) {
+
+                String s = (String) mCategory.getItemAtPosition(i);
+                if (s.equalsIgnoreCase(category)) {
+                    mCategory.setSelection(i);
+                }
+            }
+
+            mTitleText.setText(cursor.getString(cursor
+                    .getColumnIndexOrThrow(TodoTable.COLUMN_SUMMARY)));
+            mBodyText.setText(cursor.getString(cursor
+                    .getColumnIndexOrThrow(TodoTable.COLUMN_DESCRIPTION)));
+                    */
+
+            // always close the cursor
+            cursor.close();
+        }
     }
 
     @Override
