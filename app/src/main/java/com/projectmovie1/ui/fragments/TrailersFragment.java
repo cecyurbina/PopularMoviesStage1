@@ -2,6 +2,7 @@ package com.projectmovie1.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,6 +32,8 @@ import butterknife.Unbinder;
  * create an instance of this fragment.
  */
 public class TrailersFragment extends Fragment implements TrailersView {
+    private static final String SAVED_LAYOUT_MANAGER = "key_saved_layout_manager";
+    private Parcelable listState;
     private TrailersPresenter presenter;
     private Unbinder unbinder;
     private TrailersAdapter trailersAdapter;
@@ -67,6 +70,9 @@ public class TrailersFragment extends Fragment implements TrailersView {
         unbinder = ButterKnife.bind(this, view);
         trailersAdapter = new TrailersAdapter(this, trailersList);
         rvTrailers.setAdapter(trailersAdapter);
+        if (savedInstanceState != null) {
+            listState = savedInstanceState.getParcelable(SAVED_LAYOUT_MANAGER);
+        }
         getTrailers();
         return view;
     }
@@ -88,6 +94,9 @@ public class TrailersFragment extends Fragment implements TrailersView {
         trailersList.clear();
         trailersList.addAll(responseVideos.getResults());
         trailersAdapter.notifyDataSetChanged();
+        if (listState != null) {
+            rvTrailers.getLayoutManager().onRestoreInstanceState(listState);
+        }
     }
 
     @Override
@@ -119,5 +128,10 @@ public class TrailersFragment extends Fragment implements TrailersView {
     public void onDestroy() {
         presenter.onDestroy();
         super.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(SAVED_LAYOUT_MANAGER, rvTrailers.getLayoutManager().onSaveInstanceState());
     }
 }

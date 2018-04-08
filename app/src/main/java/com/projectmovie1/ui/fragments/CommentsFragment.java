@@ -3,6 +3,7 @@ package com.projectmovie1.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -32,9 +33,10 @@ import butterknife.Unbinder;
  * create an instance of this fragment.
  */
 public class CommentsFragment extends Fragment implements CommentsView {
+    private static final String SAVED_LAYOUT_MANAGER = "key_saved_layout_manager";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
+    private Parcelable listState;
     private CommentsPresenter presenter;
     private Unbinder unbinder;
     private CommentsAdapter commentsAdapter;
@@ -78,6 +80,9 @@ public class CommentsFragment extends Fragment implements CommentsView {
         unbinder = ButterKnife.bind(this, view);
         commentsAdapter = new CommentsAdapter(this, commentsList);
         rvComments.setAdapter(commentsAdapter);
+        if (savedInstanceState != null) {
+            listState = savedInstanceState.getParcelable(SAVED_LAYOUT_MANAGER);
+        }
         getComments();
         return view;
     }
@@ -92,6 +97,9 @@ public class CommentsFragment extends Fragment implements CommentsView {
         commentsList.clear();
         commentsList.addAll(responseComments.getResults());
         commentsAdapter.notifyDataSetChanged();
+        if (listState != null) {
+            rvComments.getLayoutManager().onRestoreInstanceState(listState);
+        }
 
     }
 
@@ -124,6 +132,11 @@ public class CommentsFragment extends Fragment implements CommentsView {
             throw new ClassCastException(activity.toString()
                     + " must implement OnHeadlineSelectedListener");
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(SAVED_LAYOUT_MANAGER, rvComments.getLayoutManager().onSaveInstanceState());
     }
 
 }
