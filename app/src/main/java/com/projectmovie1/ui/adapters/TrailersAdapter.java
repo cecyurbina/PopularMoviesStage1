@@ -83,9 +83,10 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.VideoV
         Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
         Intent webIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse("http://www.youtube.com/watch?v=" + id));
-        try {
+        // Verify that the intent will resolve to an activity
+        if (appIntent.resolveActivity(context.getPackageManager()) != null) {
             context.startActivity(appIntent);
-        } catch (ActivityNotFoundException ex) {
+        } else {
             context.startActivity(webIntent);
         }
     }
