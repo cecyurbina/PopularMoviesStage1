@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.projectmovie1.R;
+import com.projectmovie1.data.ContentProviderEx;
 import com.projectmovie1.data.DatabaseHelper;
 import com.projectmovie1.data.model.PopularMovieResult;
 import com.projectmovie1.data.model.Result;
@@ -145,40 +147,49 @@ import butterknife.ButterKnife;
     }
 
     private void getFavoritesMovies() {
-        popularMovieResult = new PopularMovieResult();
+        /*popularMovieResult = new PopularMovieResult();
         DatabaseHelper helper = DatabaseHelper.getInstance(this);
         movies.clear();
         popularMovieResult.setResults(helper.getFavorites());
         movies.addAll(popularMovieResult.getResults());
-        adapterMovie.notifyDataSetChanged();
+        adapterMovie.notifyDataSetChanged();*/
+        fillData(ContentProviderEx.CONTENT_URI);
     }
     private void fillData(Uri uri) {
-        String[] projection = {MovieTable.COLUMN_TITLE,
-                MovieTable.COLUMN_DESCRIPTION, MovieTable.COLUMN_DATE};
+        String[] projection = {MovieTable.COLUMN_ID, MovieTable.COLUMN_MOVIE_ID,
+                MovieTable.COLUMN_TITLE, MovieTable.COLUMN_DESCRIPTION, MovieTable.COLUMN_URL,
+                MovieTable.COLUMN_DATE, MovieTable.COLUMN_VOTE};
         Cursor cursor = getContentResolver().query(uri, projection, null, null,
                     null);
         if (cursor != null) {
-            cursor.moveToFirst();
-            /*String category = cursor.getString(cursor
-                    .getColumnIndexOrThrow(TodoTable.COLUMN_CATEGORY));
-
-            for (int i = 0; i < mCategory.getCount(); i++) {
-
-                String s = (String) mCategory.getItemAtPosition(i);
-                if (s.equalsIgnoreCase(category)) {
-                    mCategory.setSelection(i);
+            List<Result> list = new ArrayList<>();
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    Result resultTemp = new Result();
+                    resultTemp.setTitle(cursor.getString(cursor
+                            .getColumnIndexOrThrow(MovieTable.COLUMN_TITLE)));
+                    resultTemp.setId(cursor.getInt(cursor
+                            .getColumnIndexOrThrow(MovieTable.COLUMN_MOVIE_ID)));
+                    resultTemp.setOverview(cursor.getString(cursor
+                            .getColumnIndexOrThrow(MovieTable.COLUMN_DESCRIPTION)));
+                    resultTemp.setPosterPath(cursor.getString(cursor
+                            .getColumnIndexOrThrow(MovieTable.COLUMN_URL)));
+                    resultTemp.setVoteAverage(Double.valueOf(cursor.getString(cursor
+                            .getColumnIndexOrThrow(MovieTable.COLUMN_VOTE))));
+                    resultTemp.setReleaseDate(cursor.getString(cursor
+                            .getColumnIndexOrThrow(MovieTable.COLUMN_DATE)));
+                    list.add(resultTemp);
+                    cursor.moveToNext();
                 }
             }
-
-            mTitleText.setText(cursor.getString(cursor
-                    .getColumnIndexOrThrow(TodoTable.COLUMN_SUMMARY)));
-            mBodyText.setText(cursor.getString(cursor
-                    .getColumnIndexOrThrow(TodoTable.COLUMN_DESCRIPTION)));
-                    */
-
-            // always close the cursor
-            cursor.close();
+            popularMovieResult = new PopularMovieResult();
+            movies.clear();
+            popularMovieResult.setResults(list);
+            movies.addAll(popularMovieResult.getResults());
+            adapterMovie.notifyDataSetChanged();
         }
+
+
     }
 
     @Override

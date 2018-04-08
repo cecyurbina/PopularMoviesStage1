@@ -10,9 +10,13 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.projectmovie1.data.repository.MovieDatabaseHelper;
 import com.projectmovie1.data.repository.MovieTable;
+
+import java.util.Arrays;
+import java.util.HashSet;
 
 public class ContentProviderEx extends ContentProvider {
     // database
@@ -96,12 +100,50 @@ public class ContentProviderEx extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        return null;
+        int uriType = sURIMatcher.match(uri);
+        SQLiteDatabase sqlDB = database.getWritableDatabase();
+        long id = 0;
+        switch (uriType) {
+            case MOVIES:
+                id = sqlDB.insert(MovieTable.TABLE_MOVIE, null, contentValues);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return Uri.parse(BASE_PATH + "/" + id);
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+        int uriType = sURIMatcher.match(uri);
+        SQLiteDatabase sqlDB = database.getWritableDatabase();
+        int rowsDeleted = 0;
+        switch (uriType) {
+            case MOVIES:
+                rowsDeleted = sqlDB.delete(MovieTable.TABLE_MOVIE, selection,
+                        selectionArgs);
+                break;
+            case MOVIE_ID:
+                String id = uri.getLastPathSegment();
+                if (TextUtils.isEmpty(selection)) {
+                    rowsDeleted = sqlDB.delete(
+                            MovieTable.TABLE_MOVIE,
+                            MovieTable.COLUMN_MOVIE_ID + "=" + id,
+                            null);
+                } else {
+                    rowsDeleted = sqlDB.delete(
+                            MovieTable.TABLE_MOVIE,
+                            MovieTable.COLUMN_MOVIE_ID + "=" + id
+                                    + " and " + selection,
+                            selectionArgs);
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return rowsDeleted;
     }
 
     @Override
@@ -110,9 +152,9 @@ public class ContentProviderEx extends ContentProvider {
     }
 
     private void checkColumns(String[] projection) {
-        /*String[] available = { TodoTable.COLUMN_CATEGORY,
-                TodoTable.COLUMN_SUMMARY, TodoTable.COLUMN_DESCRIPTION,
-                TodoTable.COLUMN_ID };
+        String[] available = { MovieTable.COLUMN_ID, MovieTable.COLUMN_MOVIE_ID,
+                MovieTable.COLUMN_TITLE, MovieTable.COLUMN_DESCRIPTION, MovieTable.COLUMN_URL,
+                MovieTable.COLUMN_DATE, MovieTable.COLUMN_VOTE};
         if (projection != null) {
             HashSet<String> requestedColumns = new HashSet<String>(
                     Arrays.asList(projection));
@@ -123,6 +165,6 @@ public class ContentProviderEx extends ContentProvider {
                 throw new IllegalArgumentException(
                         "Unknown columns in projection");
             }
-        }*/
+        }
     }
 }

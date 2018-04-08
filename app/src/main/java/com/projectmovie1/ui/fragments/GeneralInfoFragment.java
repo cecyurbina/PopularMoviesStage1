@@ -1,6 +1,8 @@
 package com.projectmovie1.ui.fragments;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,8 +12,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.projectmovie1.R;
+import com.projectmovie1.data.ContentProviderEx;
 import com.projectmovie1.data.DatabaseHelper;
 import com.projectmovie1.data.model.Result;
+import com.projectmovie1.data.repository.MovieTable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -116,6 +120,9 @@ public class GeneralInfoFragment extends Fragment {
         if (helper.isFavorite(id)){
             helper.removeFavorite(id);
             ibFavorite.setImageResource(R.drawable.ic_star_border_black_24dp);
+            Uri uri = Uri.parse(ContentProviderEx.CONTENT_URI + "/"
+                    + id);
+            getContext().getContentResolver().delete(uri, null, null);
         } else {
             Result result = new Result();
             result.setId(id);
@@ -126,6 +133,18 @@ public class GeneralInfoFragment extends Fragment {
             result.setVoteAverage(Double.valueOf(voteAverage));
             helper.addFavorite(result);
             ibFavorite.setImageResource(R.drawable.ic_star_black_24dp);
+
+            ContentValues values = new ContentValues();
+            values.put(MovieTable.COLUMN_MOVIE_ID, id);
+            values.put(MovieTable.COLUMN_TITLE, title);
+            values.put(MovieTable.COLUMN_DESCRIPTION, plotSynopsis);
+            values.put(MovieTable.COLUMN_URL, urlPoster);
+            values.put(MovieTable.COLUMN_DATE, releaseDate);
+            values.put(MovieTable.COLUMN_VOTE, voteAverage);
+
+            // New todo
+            getContext().getContentResolver().insert(ContentProviderEx.CONTENT_URI, values);
+
         }
     }
 

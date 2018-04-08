@@ -27,7 +27,7 @@
 
         <provider
             android:name=".data.ContentProviderEx"
-            android:authorities="com.projectmovie1.data.ContentProviderEx"/>
+            android:authorities="movies.contentprovider"/>
     </application>
 
 </manifest>
