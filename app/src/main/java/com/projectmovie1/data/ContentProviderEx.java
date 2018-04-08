@@ -19,10 +19,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 public class ContentProviderEx extends ContentProvider {
-    // database
     private MovieDatabaseHelper database;
 
-    // used for the UriMacher
     private static final int MOVIES = 10;
     private static final int MOVIE_ID = 20;
 
@@ -47,11 +45,6 @@ public class ContentProviderEx extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        /*
-         * Creates a new helper object. This method always returns quickly.
-         * Notice that the database itself isn't created or opened
-         * until SQLiteOpenHelper.getWritableDatabase is called
-         */
         database = new MovieDatabaseHelper(getContext());
         return false;
     }
@@ -60,13 +53,8 @@ public class ContentProviderEx extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        //Uisng SQLiteQueryBuilder instead of query() method
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-
-        // check if the caller has requested a column which does not exists
         checkColumns(projection);
-
-        // Set the table
         queryBuilder.setTables(MovieTable.TABLE_MOVIE);
 
         int uriType = sURIMatcher.match(uri);
@@ -74,8 +62,7 @@ public class ContentProviderEx extends ContentProvider {
             case MOVIES:
                 break;
             case MOVIE_ID:
-                // adding the ID to the original query
-                queryBuilder.appendWhere(MovieTable.COLUMN_ID + "="
+                queryBuilder.appendWhere(MovieTable.COLUMN_MOVIE_ID + "="
                         + uri.getLastPathSegment());
                 break;
             default:
@@ -85,7 +72,6 @@ public class ContentProviderEx extends ContentProvider {
         SQLiteDatabase db = database.getWritableDatabase();
         Cursor cursor = queryBuilder.query(db, projection, selection,
                 selectionArgs, null, null, sortOrder);
-        // make sure that potential listeners are getting notified
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
         return cursor;
@@ -160,7 +146,6 @@ public class ContentProviderEx extends ContentProvider {
                     Arrays.asList(projection));
             HashSet<String> availableColumns = new HashSet<String>(
                     Arrays.asList(available));
-            // check if all columns which are requested are available
             if (!availableColumns.containsAll(requestedColumns)) {
                 throw new IllegalArgumentException(
                         "Unknown columns in projection");

@@ -2,6 +2,7 @@ package com.projectmovie1.ui.fragments;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,8 +14,6 @@ import android.widget.TextView;
 
 import com.projectmovie1.R;
 import com.projectmovie1.data.ContentProviderEx;
-import com.projectmovie1.data.DatabaseHelper;
-import com.projectmovie1.data.model.Result;
 import com.projectmovie1.data.repository.MovieTable;
 
 import butterknife.BindView;
@@ -116,24 +115,22 @@ public class GeneralInfoFragment extends Fragment {
 
     @OnClick(R.id.ib_fav)
     public void submit(View view) {
-        DatabaseHelper helper = DatabaseHelper.getInstance(getContext());
-        if (helper.isFavorite(id)){
-            helper.removeFavorite(id);
+
+        Uri uriIsFav = Uri.parse(ContentProviderEx.CONTENT_URI + "/"
+                + id);
+        String[] projection = {MovieTable.COLUMN_ID, MovieTable.COLUMN_MOVIE_ID,
+                MovieTable.COLUMN_TITLE, MovieTable.COLUMN_DESCRIPTION, MovieTable.COLUMN_URL,
+                MovieTable.COLUMN_DATE, MovieTable.COLUMN_VOTE};
+        Cursor cursor = getContext().getContentResolver().query(uriIsFav, projection, null, null,
+                null);
+
+        if (cursor.getCount() > 0){
             ibFavorite.setImageResource(R.drawable.ic_star_border_black_24dp);
             Uri uri = Uri.parse(ContentProviderEx.CONTENT_URI + "/"
                     + id);
             getContext().getContentResolver().delete(uri, null, null);
         } else {
-            Result result = new Result();
-            result.setId(id);
-            result.setTitle(title);
-            result.setOverview(plotSynopsis);
-            result.setPosterPath(urlPoster);
-            result.setReleaseDate(releaseDate);
-            result.setVoteAverage(Double.valueOf(voteAverage));
-            helper.addFavorite(result);
             ibFavorite.setImageResource(R.drawable.ic_star_black_24dp);
-
             ContentValues values = new ContentValues();
             values.put(MovieTable.COLUMN_MOVIE_ID, id);
             values.put(MovieTable.COLUMN_TITLE, title);
@@ -141,8 +138,6 @@ public class GeneralInfoFragment extends Fragment {
             values.put(MovieTable.COLUMN_URL, urlPoster);
             values.put(MovieTable.COLUMN_DATE, releaseDate);
             values.put(MovieTable.COLUMN_VOTE, voteAverage);
-
-            // New todo
             getContext().getContentResolver().insert(ContentProviderEx.CONTENT_URI, values);
 
         }
@@ -152,8 +147,15 @@ public class GeneralInfoFragment extends Fragment {
      *
      */
     private void setFavourite(){
-        DatabaseHelper helper = DatabaseHelper.getInstance(getContext());
-        if (helper.isFavorite(id)){
+        Uri uriIsFav = Uri.parse(ContentProviderEx.CONTENT_URI + "/"
+                + id);
+        String[] projection = {MovieTable.COLUMN_ID, MovieTable.COLUMN_MOVIE_ID,
+                MovieTable.COLUMN_TITLE, MovieTable.COLUMN_DESCRIPTION, MovieTable.COLUMN_URL,
+                MovieTable.COLUMN_DATE, MovieTable.COLUMN_VOTE};
+        Cursor cursor = getContext().getContentResolver().query(uriIsFav, projection, null, null,
+                null);
+
+        if (cursor.getCount() > 0){
            ibFavorite.setImageResource(R.drawable.ic_star_black_24dp);
         } else {
             ibFavorite.setImageResource(R.drawable.ic_star_border_black_24dp);

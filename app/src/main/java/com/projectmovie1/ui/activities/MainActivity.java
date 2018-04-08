@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.projectmovie1.R;
 import com.projectmovie1.data.ContentProviderEx;
-import com.projectmovie1.data.DatabaseHelper;
 import com.projectmovie1.data.model.PopularMovieResult;
 import com.projectmovie1.data.model.Result;
 import com.projectmovie1.data.repository.MovieTable;
@@ -147,20 +145,11 @@ import butterknife.ButterKnife;
     }
 
     private void getFavoritesMovies() {
-        /*popularMovieResult = new PopularMovieResult();
-        DatabaseHelper helper = DatabaseHelper.getInstance(this);
-        movies.clear();
-        popularMovieResult.setResults(helper.getFavorites());
-        movies.addAll(popularMovieResult.getResults());
-        adapterMovie.notifyDataSetChanged();*/
-        fillData(ContentProviderEx.CONTENT_URI);
-    }
-    private void fillData(Uri uri) {
         String[] projection = {MovieTable.COLUMN_ID, MovieTable.COLUMN_MOVIE_ID,
                 MovieTable.COLUMN_TITLE, MovieTable.COLUMN_DESCRIPTION, MovieTable.COLUMN_URL,
                 MovieTable.COLUMN_DATE, MovieTable.COLUMN_VOTE};
-        Cursor cursor = getContentResolver().query(uri, projection, null, null,
-                    null);
+        Cursor cursor = getContentResolver().query(ContentProviderEx.CONTENT_URI, projection, null, null,
+                null);
         if (cursor != null) {
             List<Result> list = new ArrayList<>();
             if (cursor.moveToFirst()) {
@@ -188,7 +177,6 @@ import butterknife.ButterKnife;
             movies.addAll(popularMovieResult.getResults());
             adapterMovie.notifyDataSetChanged();
         }
-
 
     }
 
